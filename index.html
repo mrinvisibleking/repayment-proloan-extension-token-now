@@ -1193,7 +1193,7 @@ button {
                         </span>
 
                         <span>
-                            Data stored locally in this browser
+                            Live shared tracking • refreshes every 2 seconds
                         </span>
 
                     </div>
@@ -1374,17 +1374,43 @@ function renderSavedCustomers() {
   const box = document.getElementById("saved-customers");
   if (!box) return;
   if (!savedCustomers.length) {
-    box.innerHTML = '<div style="font-size:11px;color:#94a3b8;padding:8px 0;">No saved customer details yet.</div>';
+    box.innerHTML = '<div style="font-size:11px;color:#94a3b8;padding:8px 0;text-align:center;">No saved customer details yet.</div>';
     return;
   }
-  box.innerHTML = savedCustomers.map((item, i) => `
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:8px;background:#f8fafc;">
-      <div style="min-width:0;">
-        <div style="font-size:12px;font-weight:700;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(item.name)}</div>
-        <div style="font-size:10px;color:#64748b;">${escapeHTML(item.mobile)} • ₹${escapeHTML(item.amount)}</div>
-      </div>
-      <button type="button" onclick="loadSavedCustomer(${i})" style="border:0;background:#dbeafe;color:#1d4ed8;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer;">Load</button>
-    </div>`).join("");
+  box.innerHTML = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+      <button type="button" onclick="clearSavedCustomers()" style="border:0;background:#fee2e2;color:#b91c1c;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:800;cursor:pointer;">🗑 Clear All</button>
+    </div>
+    ${savedCustomers.map((item, i) => `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:8px;background:#f8fafc;">
+        <div style="min-width:0;flex:1;">
+          <div style="font-size:12px;font-weight:700;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(item.name)}</div>
+          <div style="font-size:10px;color:#64748b;">${escapeHTML(item.mobile)} • ₹${escapeHTML(item.amount)}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button type="button" onclick="loadSavedCustomer(${i})" style="border:0;background:#dbeafe;color:#1d4ed8;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer;">Load</button>
+          <button type="button" onclick="deleteSavedCustomer(${i})" title="Delete" style="border:0;background:#fee2e2;color:#dc2626;border-radius:8px;padding:7px 9px;font-size:12px;font-weight:800;cursor:pointer;">✕</button>
+        </div>
+      </div>`).join("")}`;
+}
+
+function deleteSavedCustomer(index) {
+  const item = savedCustomers[index];
+  if (!item) return;
+  if (!confirm(`Delete saved details for ${item.name || 'this customer'}?`)) return;
+  savedCustomers.splice(index, 1);
+  localStorage.setItem(SAVED_CUSTOMERS_KEY, JSON.stringify(savedCustomers));
+  renderSavedCustomers();
+  showToast("Saved customer deleted.");
+}
+
+function clearSavedCustomers() {
+  if (!savedCustomers.length) return;
+  if (!confirm("Clear all saved customer details?")) return;
+  savedCustomers = [];
+  localStorage.removeItem(SAVED_CUSTOMERS_KEY);
+  renderSavedCustomers();
+  showToast("Saved customer details cleared.");
 }
 
 function loadSavedCustomer(index) {
@@ -1445,9 +1471,12 @@ async function generateLink() {
     upi: details.upi,
     url: targetUrl,
     visited: false,
+    visitedAt: "",
     copied: false,
+    copiedAt: "",
     status: "Pending",
     utr: "",
+    utrSubmittedAt: "",
     createdAt: new Date().toISOString()
   };
 
@@ -1527,7 +1556,7 @@ function renderHistory() {
       <td>${item.visited ? '<span class="badge badge-yes">✓ Yes</span>' : '<span class="badge badge-no">◉ No</span>'}</td>
       <td>${item.copied ? '<span class="badge badge-yes">✓ Yes</span>' : '<span class="badge badge-no">◉ No</span>'}</td>
       <td>${statusHTML}</td>
-      <td>${escapeHTML(formatDate(item.createdAt))}</td>
+      <td>${item.visited ? escapeHTML(formatDate(item.visitedAt || item.createdAt)) : '<span style="color:#94a3b8;">Not visited</span>'}</td>
     </tr>`;
   }).join("");
 }
