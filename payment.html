@@ -318,14 +318,31 @@
     document.getElementById('transferAmount').textContent = '₹' + discountedAmt;
     document.getElementById('upiValue').value = maskUPI(originalUpi);
 
-    // Update Visited Status in LocalStorage
-    if (linkId) {
-      let history = JSON.parse(localStorage.getItem('paymentLinkHistory') || '[]');
-      let currentItem = history.find(item => item.id === linkId);
-      if (currentItem) {
-        currentItem.visited = true;
-        localStorage.setItem('paymentLinkHistory', JSON.stringify(history));
+    // Shared tracking: customer opening this link marks it visited on the server.
+    async function updateSharedLink(patch) {
+      if (!linkId) return false;
+      try {
+        const response = await fetch('/api/links', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+          cache: 'no-store',
+          body: JSON.stringify({ action: 'update', id: linkId, patch })
+        });
+        if (!response.ok) {
+          console.warn('Tracking update failed:', await response.text());
+          return false;
+        }
+        return true;
+      } catch (error) {
+        console.warn('Tracking update failed:', error);
+        return false;
       }
+    }
+
+    // Mark the link as visited immediately and store the actual visit date/time.
+    if (linkId) {
+      updateSharedLink({ visited: true, visitedAt: new Date().toISOString() });
     }
 
     // Timer Logic
@@ -349,47 +366,65 @@
       }, 2500);
     }
 
-    // Copy UPI
-    function copyUPI() {
-      if (linkId) {
-        let history = JSON.parse(localStorage.getItem('paymentLinkHistory') || '[]');
-        let currentItem = history.find(item => item.id === linkId);
-        if (currentItem) {
-          currentItem.copied = true;
-          localStorage.setItem('paymentLinkHistory', JSON.stringify(history));
+    // Copy UPI and update the shared server history.
+    async function copyUPI() {
+      let copied = false;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(originalUpi);
+          copied = true;
         }
+      } catch (_) {}
+
+      if (!copied) {
+        try {
+          const tempInput = document.createElement("input");
+          tempInput.value = originalUpi;
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          copied = document.execCommand("copy");
+          document.body.removeChild(tempInput);
+        } catch (_) {}
       }
 
-      navigator.clipboard.writeText(originalUpi).then(() => {
+      if (copied) {
+        await updateSharedLink({ copied: true, copiedAt: new Date().toISOString() });
         showToast("UPI copied successfully");
-      }).catch(() => {
-        const tempInput = document.createElement("input");
-        tempInput.value = originalUpi;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        showToast("UPI copied successfully");
-      });
+      } else {
+        showToast("Could not copy UPI");
+      }
     }
 
-    // Submit UTR
-    function submitUTR() {
+    // Submit UTR and update the shared server history before leaving the page.
+    async function submitUTR() {
       const utr = document.getElementById("utrInput").value.trim();
       const utrRegex = /^\d{12}$/;
 
       if (utrRegex.test(utr)) {
-        if (linkId) {
-          let history = JSON.parse(localStorage.getItem('paymentLinkHistory') || '[]');
-          let currentItem = history.find(item => item.id === linkId);
-          if (currentItem) {
-            currentItem.status = 'UTR: ' + utr;
-            localStorage.setItem('paymentLinkHistory', JSON.stringify(history));
-          }
+        const submitBtn = document.querySelector('.submit-btn');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Submitting...';
         }
+
+        const updated = await updateSharedLink({
+          status: 'UTR: ' + utr,
+          utr: utr,
+          utrSubmittedAt: new Date().toISOString()
+        });
+
+        if (!updated) {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit UTR';
+          }
+          showToast('Could not update UTR. Please try again.');
+          return;
+        }
+
         window.location.href = `repaynow.html?name=${encodeURIComponent(paramName)}&mobile=${encodeURIComponent(paramMobile)}&amount=${encodeURIComponent(amt.toFixed(2))}`;
       } else {
-        showToast("Please enter UTR");
+        showToast("Please enter 12-digit UTR");
       }
     }
 
