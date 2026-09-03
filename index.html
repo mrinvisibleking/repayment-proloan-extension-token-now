@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Manager Portal</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0f172a;
+}
+
+/* =========================
+   COMMON
+========================= */
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================
+   LANDING / LOGIN
+========================= */
+
+.center-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 430px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 22px;
+    padding: 32px;
+    box-shadow: 0 25px 60px rgba(0,0,0,.35);
+}
+
+.login-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #818cf8;
+    text-align: center;
+    margin: 0 0 8px;
+}
+
+.login-subtitle {
+    color: #94a3b8;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 26px;
+}
+
+.dark-label {
+    display: block;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.dark-input {
+    width: 100%;
+    padding: 13px 15px;
+    border-radius: 12px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: white;
+    outline: none;
+}
+
+.dark-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+}
+
+/* =========================
+   ADMIN WRAPPER
+========================= */
+
+.admin-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    padding: clamp(12px, 3vw, 32px);
+    background:
+        radial-gradient(circle at top left, rgba(59,130,246,.13), transparent 30%),
+        #0f172a;
+}
+
+.dashboard {
+    width: min(1500px, 100%);
+    margin: 0 auto;
+    background: #f8fafc;
+    color: #0f172a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.dashboard-header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.header-icon {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+}
+
+.header-title {
+    margin: 0;
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 800;
+}
+
+.header-subtitle {
+    margin: 4px 0 0;
+    font-size: 12px;
+    opacity: .82;
+}
+
+.logout-btn {
+    border: 0;
+    background: #ef4444;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.logout-btn:hover {
+    background: #dc2626;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.dashboard-body {
+    padding: clamp(14px, 2.5vw, 28px);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, 390px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(15,23,42,.05);
+}
+
+.card-header {
+    padding: 18px 18px 12px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.card-description {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.card-content {
+    padding: 0 18px 18px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-group {
+    margin-top: 15px;
+}
+
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 7px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.form-input {
+    width: 100%;
+    height: 45px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #fff;
+    color: #0f172a;
+    padding: 0 13px;
+    outline: none;
+    transition: .2s;
+}
+
+.form-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+}
+
+.form-input::placeholder {
+    color: #94a3b8;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn,
+.success-btn,
+.danger-btn,
+.secondary-btn,
+.outline-btn {
+    min-height: 44px;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.primary-btn {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #1d4ed8;
+}
+
+.success-btn {
+    width: 100%;
+    background: #059669;
+    color: white;
+}
+
+.success-btn:hover {
+    background: #047857;
+}
+
+.danger-btn {
+    background: #dc2626;
+    color: white;
+    padding: 9px 14px;
+}
+
+.danger-btn:hover {
+    background: #b91c1c;
+}
+
+.secondary-btn {
+    background: #475569;
+    color: white;
+    padding: 9px 14px;
+}
+
+.secondary-btn:hover {
+    background: #334155;
+}
+
+.outline-btn {
+    background: white;
+    color: #2563eb;
+    border: 1px solid #93c5fd;
+    padding: 9px 14px;
+}
+
+.outline-btn:hover {
+    background: #eff6ff;
+}
+
+.button-stack {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.two-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* =========================
+   SAVED DETAILS
+========================= */
+
+.saved-box {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 11px;
+}
+
+.saved-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+.saved-list {
+    display: grid;
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.saved-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 9px 10px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.saved-info {
+    min-width: 0;
+}
+
+.saved-name {
+    font-weight: 700;
+    font-size: 12px;
+    color: #0f172a;
+}
+
+.saved-meta {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.load-saved-btn {
+    border: 0;
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-radius: 7px;
+    padding: 6px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* =========================
+   TABLE CARD
+========================= */
+
+.history-card {
+    min-width: 0;
+}
+
+.history-top {
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.history-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+}
+
+.history-table th {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.history-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+    font-size: 12px;
+}
+
+.history-table tr:hover td {
+    background: #f8fafc;
+}
+
+.customer-cell {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 170px;
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.customer-name {
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.customer-meta {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.copy-link-btn {
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-radius: 7px;
+    padding: 7px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.badge-yes {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-no {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-pending {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.badge-utr {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.date-cell {
+    color: #64748b;
+    white-space: nowrap;
+    font-size: 10px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.dashboard-footer {
+    padding: 12px 18px 18px;
+    color: #64748b;
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-state {
+    padding: 45px 20px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.empty-icon {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.empty-title {
+    color: #475569;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+    max-width: calc(100vw - 40px);
+    background: #0f172a;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    font-size: 13px;
+    opacity: 0;
+    transform: translateY(15px);
+    pointer-events: none;
+    transition: .25s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-wrapper {
+        padding: 0;
+    }
+
+    .dashboard {
+        min-height: 100vh;
+        border-radius: 0;
+    }
+
+    .dashboard-header {
+        padding: 16px;
+    }
+
+    .header-icon {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+    }
+
+    .header-title {
+        font-size: 17px;
+    }
+
+    .header-subtitle {
+        font-size: 10px;
+    }
+
+    .logout-btn {
+        padding: 8px 11px;
+        font-size: 12px;
+    }
+
+    .dashboard-body {
+        padding: 10px;
+    }
+
+    .card {
+        border-radius: 13px;
+    }
+
+    .card-header,
+    .card-content {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .two-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .history-top {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px;
+    }
+
+    .history-actions {
+        width: 100%;
+    }
+
+    .history-actions button {
+        flex: 1;
+    }
+
+    .dashboard-footer {
+        padding: 10px 14px 16px;
+    }
+
+    .toast {
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        max-width: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .dashboard-header {
+        gap: 8px;
+    }
+
+    .header-subtitle {
+        display: none;
+    }
+
+    .header-title {
+        font-size: 15px;
+    }
+
+    .logout-btn {
+        font-size: 11px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================
+     LANDING PAGE
+========================================= -->
+
+<div id="landing-page" class="center-screen">
+
+    <div class="login-card">
+
+        <h1 class="login-title">Welcome</h1>
+
+        <p class="login-subtitle">
+            Manager repayment payment portal
+        </p>
+
+        <button
+            onclick="openSecretModal()"
+            class="primary-btn"
+        >
+            Contact With Manager
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     SECRET MODAL
+========================================= -->
+
+<div
+    id="secret-modal"
+    class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm items-center justify-center z-50 p-4"
+>
+
+    <div class="login-card">
+
+        <h2 class="login-title" style="font-size:23px;">
+            Enter Secret Code
+        </h2>
+
+        <p class="login-subtitle">
+            Please enter the security code to proceed.
+        </p>
+
+        <form onsubmit="verifySecretCode(event)">
+
+            <label class="dark-label">
+                Security Code
+            </label>
+
+            <input
+                type="password"
+                id="secret-code-input"
+                class="dark-input"
+                placeholder="Enter secret code..."
+                required
+            >
+
+            <div
+                id="secret-error"
+                class="hidden text-red-400 text-sm mt-3 mb-3"
+            >
+                Incorrect secret code. Try again.
+            </div>
+
+            <div class="two-buttons" style="margin-top:16px;">
+
+                <button
+                    type="button"
+                    onclick="closeSecretModal()"
+                    class="secondary-btn"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Submit
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     ADMIN LOGIN
+========================================= -->
+
+<div id="admin-login-page" class="hidden center-screen">
+
+    <div class="login-card">
+
+        <h2 class="login-title" style="font-size:23px;">
+            Admin Dashboard
+        </h2>
+
+        <p class="login-subtitle">
+            Enter your admin credentials to access the system.
+        </p>
+
+        <form onsubmit="verifyAdminLogin(event)">
+
+            <div style="margin-bottom:15px;">
+
+                <label class="dark-label">
+                    Admin Username
+                </label>
+
+                <input
+                    type="text"
+                    id="admin-user"
+                    class="dark-input"
+                    placeholder="Username"
+                    required
+                >
+
+            </div>
+
+            <div style="margin-bottom:15px;">
+
+                <label class="dark-label">
+                    Admin Password
+                </label>
+
+                <input
+                    type="password"
+                    id="admin-pass"
+                    class="dark-input"
+                    placeholder="Password"
+                    required
+                >
+
+            </div>
+
+            <div
+                id="admin-error"
+                class="hidden text-red-400 text-sm mb-4"
+            >
+                Invalid username or password.
+            </div>
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                Login to Dashboard
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     ADMIN DASHBOARD
+========================================= -->
+
+<div
+    id="d3repayon-container"
+    class="hidden admin-wrapper"
+>
+
+    <div class="dashboard">
+
+        <!-- HEADER -->
+
+        <header class="dashboard-header">
+
+            <div class="header-left">
+
+                <div class="header-icon">
+                    🛡️
+                </div>
+
+                <div>
+
+                    <h1 class="header-title">
+                        Admin Dashboard - Repayment Panel
+                    </h1>
+
+                    <p class="header-subtitle">
+                        Generate payment links and manage repayment activity
+                    </p>
+
+                </div>
+
+            </div>
+
+            <button
+                onclick="logoutDashboard()"
+                class="logout-btn"
+            >
+                ↪ Logout
+            </button>
+
+        </header>
+
+
+        <!-- BODY -->
+
+        <main class="dashboard-body">
+
+            <div class="dashboard-grid">
+
+                <!-- =================================
+                     CREATE LINK CARD
+                ================================== -->
+
+                <section class="card">
+
+                    <div class="card-header">
+
+                        <h2 class="card-title">
+                            💳 Create Payment Link
+                        </h2>
+
+                        <p class="card-description">
+                            Enter customer details and generate a secure payment link.
+                        </p>
+
+                    </div>
+
+                    <div class="card-content">
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Customer Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="input-name"
+                                class="form-input"
+                                placeholder="Enter Customer Name"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <!-- MOBILE -->
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Mobile Number
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="input-mobile"
+                                class="form-input"
+                                placeholder="Enter Mobile Number"
+                                autocomplete="off"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+
+                        <!-- AMOUNT -->
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Amount (₹)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="input-amount"
+                                class="form-input"
+                                placeholder="Enter amount"
+                                min="0"
+                                step="0.01"
+                            >
+
+                        </div>
+
+
+                        <!-- UPI -->
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                UPI ID
+                            </label>
+
+                            <input
+                                type="text"
+                                id="input-upi"
+                                class="form-input"
+                                placeholder="Enter UPI ID (e.g. name@upi)"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <!-- BUTTONS -->
+
+                        <div class="button-stack">
+
+                            <button
+                                onclick="generateLink()"
+                                class="primary-btn"
+                            >
+                                🔗 Generate & Track Link
+                            </button>
+
+                            <button
+                                onclick="saveCustomerDetails()"
+                                class="success-btn"
+                            >
+                                💾 Save Details
+                            </button>
+
+                        </div>
+
+
+                        <!-- INFO -->
+
+                        <div
+                            style="
+                                margin-top:10px;
+                                font-size:10px;
+                                line-height:1.5;
+                                color:#64748b;
+                            "
+                        >
+                            Saved details stay in this browser and can be reused later.
+                            Generating a link will <strong>not</strong> clear your form.
+                        </div>
+
+
+                        <!-- SAVED DETAILS -->
+
+                        <div class="saved-box">
+
+                            <div class="saved-title">
+                                SAVED CUSTOMER DETAILS
+                            </div>
+
+                            <div
+                                id="saved-customers"
+                                class="saved-list"
+                            >
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================
+                     HISTORY CARD
+                ================================== -->
+
+                <section class="card history-card">
+
+                    <div class="history-top">
+
+                        <div>
+
+                            <h2 class="card-title">
+                                📋 Generated Links History
+                            </h2>
+
+                            <p class="card-description">
+                                View and manage all generated payment links.
+                            </p>
+
+                        </div>
+
+                        <div class="history-actions">
+
+                            <button
+                                onclick="refreshData()"
+                                class="outline-btn"
+                            >
+                                ↻ Refresh
+                            </button>
+
+                            <button
+                                onclick="clearHistory()"
+                                class="danger-btn"
+                            >
+                                🗑 Clear History
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-scroll">
+
+                        <table class="history-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Details
+                                    </th>
+
+                                    <th>
+                                        Copy Link
+                                    </th>
+
+                                    <th>
+                                        Visited?
+                                    </th>
+
+                                    <th>
+                                        UPI Copied?
+                                    </th>
+
+                                    <th>
+                                        Status / UTR
+                                    </th>
+
+                                    <th>
+                                        Date & Time
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody
+                                id="history-table-body"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div class="dashboard-footer">
+
+                        <span id="total-links">
+                            Total Links: 0
+                        </span>
+
+                        <span>
+                            Data stored locally in this browser
+                        </span>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div id="toast" class="toast"></div>
+
+
+
+<script>
+const AUTH_API = "/api/auth";
+const LINKS_API = "/api/links";
+const PAYMENT_BASE_URL = window.location.origin;
+const SAVED_CUSTOMERS_KEY = "savedCustomerDetails";
+let linkHistory = [];
+let savedCustomers = [];
+let polling = false;
+let toastTimer;
+
+function showToast(message) {
+  const el = document.getElementById("toast");
+  if (!el) return;
+  el.textContent = message;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 2500);
+}
+
+async function authRequest(action, body = {}) {
+  const response = await fetch(AUTH_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    cache: "no-store",
+    body: JSON.stringify({ action, ...body })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || "Authentication failed");
+  return data;
+}
+
+async function checkSession() {
+  try {
+    const response = await fetch(AUTH_API, { credentials: "same-origin", cache: "no-store" });
+    const data = await response.json();
+    if (data.authenticated) {
+      showDashboard();
+    } else if (data.preAuthenticated) {
+      showLogin();
+    } else {
+      showLanding();
+    }
+  } catch (e) {
+    showLanding();
+  }
+}
+
+function showLanding() {
+  document.getElementById("landing-page").classList.remove("hidden");
+  document.getElementById("admin-login-page").classList.add("hidden");
+  document.getElementById("d3repayon-container").classList.add("hidden");
+}
+
+function showLogin() {
+  document.getElementById("landing-page").classList.add("hidden");
+  document.getElementById("admin-login-page").classList.remove("hidden");
+  document.getElementById("d3repayon-container").classList.add("hidden");
+  setTimeout(() => document.getElementById("admin-user")?.focus(), 100);
+}
+
+function showDashboard() {
+  document.getElementById("landing-page").classList.add("hidden");
+  document.getElementById("admin-login-page").classList.add("hidden");
+  document.getElementById("d3repayon-container").classList.remove("hidden");
+  loadSavedCustomers();
+  renderSavedCustomers();
+  loadHistory();
+}
+
+function openSecretModal() {
+  const modal = document.getElementById("secret-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  document.getElementById("secret-error").classList.add("hidden");
+  setTimeout(() => document.getElementById("secret-code-input")?.focus(), 100);
+}
+
+function closeSecretModal() {
+  const modal = document.getElementById("secret-modal");
+  modal.classList.remove("flex");
+  modal.classList.add("hidden");
+  document.getElementById("secret-code-input").value = "";
+  document.getElementById("secret-error").classList.add("hidden");
+}
+
+async function verifySecretCode(event) {
+  event.preventDefault();
+  const code = document.getElementById("secret-code-input").value.trim();
+  const error = document.getElementById("secret-error");
+  try {
+    await authRequest("secret", { code });
+    closeSecretModal();
+    showLogin();
+  } catch (e) {
+    error.textContent = e.message || "Incorrect secret code. Try again.";
+    error.classList.remove("hidden");
+  }
+}
+
+async function verifyAdminLogin(event) {
+  event.preventDefault();
+  const user = document.getElementById("admin-user").value.trim();
+  const pass = document.getElementById("admin-pass").value;
+  const error = document.getElementById("admin-error");
+  try {
+    await authRequest("login", { user, pass });
+    error.classList.add("hidden");
+    document.getElementById("admin-user").value = "";
+    document.getElementById("admin-pass").value = "";
+    showDashboard();
+  } catch (e) {
+    error.textContent = e.message || "Invalid username or password.";
+    error.classList.remove("hidden");
+  }
+}
+
+async function logoutDashboard() {
+  try { await authRequest("logout"); } catch (_) {}
+  linkHistory = [];
+  showLanding();
+}
+
+function getFormDetails() {
+  return {
+    name: document.getElementById("input-name").value.trim(),
+    mobile: document.getElementById("input-mobile").value.trim(),
+    amount: document.getElementById("input-amount").value.trim(),
+    upi: document.getElementById("input-upi").value.trim()
+  };
+}
+
+function saveCustomerDetails(showMessage = true) {
+  const details = getFormDetails();
+  if (!details.name || !details.mobile || !details.amount || !details.upi) {
+    alert("Please fill Customer Name, Mobile Number, Amount and UPI ID.");
+    return false;
+  }
+  const key = `${details.name}|${details.mobile}|${details.amount}|${details.upi}`;
+  savedCustomers = savedCustomers.filter(x => `${x.name}|${x.mobile}|${x.amount}|${x.upi}` !== key);
+  savedCustomers.unshift({ ...details, savedAt: Date.now() });
+  savedCustomers = savedCustomers.slice(0, 10);
+  localStorage.setItem(SAVED_CUSTOMERS_KEY, JSON.stringify(savedCustomers));
+  renderSavedCustomers();
+  if (showMessage) showToast("Customer details saved.");
+  return true;
+}
+
+function loadSavedCustomers() {
+  try {
+    const data = JSON.parse(localStorage.getItem(SAVED_CUSTOMERS_KEY) || "[]");
+    savedCustomers = Array.isArray(data) ? data : [];
+  } catch (_) { savedCustomers = []; }
+}
+
+function renderSavedCustomers() {
+  const box = document.getElementById("saved-customers");
+  if (!box) return;
+  if (!savedCustomers.length) {
+    box.innerHTML = '<div style="font-size:11px;color:#94a3b8;padding:8px 0;">No saved customer details yet.</div>';
+    return;
+  }
+  box.innerHTML = savedCustomers.map((item, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:8px;background:#f8fafc;">
+      <div style="min-width:0;">
+        <div style="font-size:12px;font-weight:700;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(item.name)}</div>
+        <div style="font-size:10px;color:#64748b;">${escapeHTML(item.mobile)} • ₹${escapeHTML(item.amount)}</div>
+      </div>
+      <button type="button" onclick="loadSavedCustomer(${i})" style="border:0;background:#dbeafe;color:#1d4ed8;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer;">Load</button>
+    </div>`).join("");
+}
+
+function loadSavedCustomer(index) {
+  const item = savedCustomers[index];
+  if (!item) return;
+  document.getElementById("input-name").value = item.name || "";
+  document.getElementById("input-mobile").value = item.mobile || "";
+  document.getElementById("input-amount").value = item.amount || "";
+  document.getElementById("input-upi").value = item.upi || "";
+  showToast("Customer details loaded.");
+}
+
+async function apiRequest(method, body = null, query = "") {
+  const options = {
+    method,
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-cache" },
+    cache: "no-store"
+  };
+  if (body) options.body = JSON.stringify(body);
+  const response = await fetch(LINKS_API + query, options);
+  const text = await response.text();
+  let data = {};
+  try { data = text ? JSON.parse(text) : {}; } catch (_) {}
+  if (response.status === 401) {
+    showLanding();
+    throw new Error("Your manager session has expired. Please login again.");
+  }
+  if (!response.ok) throw new Error(data.error || text || "Server request failed");
+  return data;
+}
+
+async function generateLink() {
+  const details = getFormDetails();
+  if (!details.name || !details.mobile || !details.amount || !details.upi) {
+    alert("Please fill out all details.");
+    return;
+  }
+  if (Number(details.amount) <= 0) {
+    alert("Amount must be greater than 0.");
+    return;
+  }
+  saveCustomerDetails(false);
+
+  const linkId = "link_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
+  const targetUrl = PAYMENT_BASE_URL + "/payment.html" +
+    "?id=" + encodeURIComponent(linkId) +
+    "&amount=" + encodeURIComponent(details.amount) +
+    "&upi=" + encodeURIComponent(details.upi) +
+    "&name=" + encodeURIComponent(details.name) +
+    "&mobile=" + encodeURIComponent(details.mobile);
+
+  const item = {
+    id: linkId,
+    name: details.name,
+    mobile: details.mobile,
+    amount: details.amount,
+    upi: details.upi,
+    url: targetUrl,
+    visited: false,
+    copied: false,
+    status: "Pending",
+    utr: "",
+    createdAt: new Date().toISOString()
+  };
+
+  try {
+    await apiRequest("POST", { action: "create", item });
+    await loadHistory();
+    await copyLinkValue(targetUrl);
+    showToast("Payment link generated, saved to History and copied.");
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not save the payment link.");
+  }
+}
+
+async function copyLink(index) {
+  const item = linkHistory[index];
+  if (!item) return;
+  await copyLinkValue(item.url);
+  showToast("Payment link copied.");
+}
+
+async function copyLinkValue(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (_) {}
+  try {
+    const temp = document.createElement("textarea");
+    temp.value = text;
+    temp.style.position = "fixed";
+    temp.style.left = "-9999px";
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+    return true;
+  } catch (_) { return false; }
+}
+
+async function loadHistory() {
+  if (polling) return;
+  polling = true;
+  try {
+    const data = await apiRequest("GET");
+    linkHistory = Array.isArray(data.links) ? data.links : [];
+    renderHistory();
+  } catch (error) {
+    console.error("History load failed:", error);
+  } finally {
+    polling = false;
+  }
+}
+
+function refreshData() { loadHistory(); }
+
+function renderHistory() {
+  const tbody = document.getElementById("history-table-body");
+  const total = document.getElementById("total-links");
+  if (!tbody || !total) return;
+  total.textContent = "Total Links: " + linkHistory.length;
+  const footer = document.querySelector(".dashboard-footer span:last-child");
+  if (footer) footer.textContent = "Live shared data • auto-refresh every 2 seconds";
+  if (!linkHistory.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="padding:35px;text-align:center;color:#94a3b8;">No payment links yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = linkHistory.map((item, index) => {
+    const status = item.status || "Pending";
+    const statusHTML = status.startsWith("UTR:")
+      ? `<span class="badge badge-yes">✓ ${escapeHTML(status)}</span>`
+      : `<span class="badge badge-pending">◷ Pending</span>`;
+    return `<tr>
+      <td><div class="details-name">${escapeHTML(item.name || "")}</div><div class="details-sub">₹${escapeHTML(item.amount || "")}</div><div class="details-sub">${escapeHTML(item.mobile || "")}</div></td>
+      <td><button class="copy-link-btn" type="button" onclick="copyLink(${index})">▣ Copy Link</button></td>
+      <td>${item.visited ? '<span class="badge badge-yes">✓ Yes</span>' : '<span class="badge badge-no">◉ No</span>'}</td>
+      <td>${item.copied ? '<span class="badge badge-yes">✓ Yes</span>' : '<span class="badge badge-no">◉ No</span>'}</td>
+      <td>${statusHTML}</td>
+      <td>${escapeHTML(formatDate(item.createdAt))}</td>
+    </tr>`;
+  }).join("");
+}
+
+function formatDate(value) {
+  if (!value) return "-";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString();
+}
+
+async function clearHistory() {
+  if (!confirm("Are you sure you want to clear all tracking history?")) return;
+  try {
+    await apiRequest("POST", { action: "clear" });
+    linkHistory = [];
+    renderHistory();
+    showToast("History cleared.");
+  } catch (error) {
+    alert(error.message || "Could not clear history.");
+  }
+}
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+window.addEventListener("load", () => {
+  loadSavedCustomers();
+  renderSavedCustomers();
+  checkSession();
+});
+
+// Shared data check every 2 seconds while the manager is logged in.
+setInterval(() => {
+  if (!document.getElementById("d3repayon-container")?.classList.contains("hidden")) loadHistory();
+}, 2000);
+</script>
+
+</body>
+</html>

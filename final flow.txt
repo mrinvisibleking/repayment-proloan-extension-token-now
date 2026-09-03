@@ -1,0 +1,38 @@
+🔥 Final Flow
+
+Admin Page (/admin)
+
+You enter:
+
+Main Amount
+
+Discounted Amount
+
+UPI ID
+
+Paytm Link
+
+PhonePe Link
+
+Support Chat Link
+
+All data stored in localStorage.
+
+Payment Page (/payment)
+
+Displays all the details entered in admin.
+
+Has QR Code (auto-generated from discounted amount + UPI ID).
+
+Paytm / PhonePe buttons (redirect to stored links).
+
+Manual Transfer (UPI ID shown, UTR input).
+
+When user enters any 12-digit UTR and clicks Submit →
+✅ Always redirects to /issue.
+
+Issue Page (/issue)
+
+Shows the “⚠️ There is an Issue !!” message like in your screenshot.
+
+Has Contact Support Chat button → redirects to the support link from Admin Page.

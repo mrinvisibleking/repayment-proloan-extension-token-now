@@ -1,0 +1,23 @@
+Page 1 → Admin/Input Page
+
+A form where you (admin) will enter:
+
+Main amount
+
+Discounted amount
+
+QR code image (upload or link)
+
+Manual UPI ID
+
+Paytm button link
+
+PhonePe button link
+
+After submitting, these values will be saved locally (in browser storage).
+
+Page 2 → Payment Page
+
+Will automatically show the values you entered (amount, QR, UPI ID, links, etc.)
+
+Includes countdown timer, popup modals for QR code & manual transfer, reminders, etc. (just like your screenshots).

@@ -1,0 +1,38 @@
+READY-TO-DEPLOY SETUP
+=====================
+
+1) Upload this project to GitHub.
+
+2) In Vercel, import the GitHub repository.
+
+3) Connect a Vercel Blob store:
+   Vercel Dashboard -> Project -> Storage -> Create/Connect Blob.
+   The BLOB_READ_WRITE_TOKEN will then be available to the project.
+
+4) Add these Environment Variables in Vercel:
+   ADMIN_SECRET          = your NEW secret code
+   ADMIN_USER            = your NEW admin username
+   ADMIN_PASS            = your NEW strong password
+   AUTH_SIGNING_SECRET   = a long random secret (32+ characters recommended)
+
+   Set them for Production (and Preview if you need preview deployments).
+
+5) Deploy / Redeploy.
+
+IMPORTANT SECURITY NOTES
+------------------------
+- Do not put real credentials in index.html or any client-side JavaScript.
+- Do not use NEXT_PUBLIC_ for these values.
+- The old credentials from the previous project should be changed because they were already exposed in browser source/Git history.
+- Manager API GET/create/clear operations require the server-side admin session cookie.
+- Customer tracking updates remain public for the specific link ID so another phone/incognito can update Visited, UPI Copied and UTR.
+
+TRACKING
+--------
+- Generate Link -> server-side shared history
+- Customer opens link -> Visited = Yes
+- Customer copies UPI -> UPI Copied = Yes
+- Customer submits 12-digit UTR -> Status / UTR updates
+- Manager polls shared server data every 2 seconds
+- Customer details are saved locally in the manager browser
+- payment.html design is preserved

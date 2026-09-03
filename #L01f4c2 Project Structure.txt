@@ -1,0 +1,10 @@
+payment-app/
+ ├─ src/
+ │   ├─ pages/
+ │   │   ├─ Admin.jsx      // input form page
+ │   │   ├─ Payment.jsx    // payment UI page
+ │   ├─ App.jsx            // router setup
+ │   ├─ main.jsx           // entry point
+ │   └─ index.css          // Tailwind styles
+ ├─ package.json
+ └─ tailwind.config.js

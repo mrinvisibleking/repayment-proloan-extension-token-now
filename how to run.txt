@@ -1,0 +1,13 @@
+Download & extract the ZIP
+
+Run in terminal:
+
+npm install
+npm run dev
+
+
+Open in browser:
+
+http://localhost:5173/admin → enter payment details
+
+http://localhost:5173/payment → see your styled payment page
