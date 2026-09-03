@@ -9,239 +9,721 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-body{
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0f172a;
+}
+
+/* =========================
+   COMMON
+========================= */
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================
+   LANDING / LOGIN
+========================= */
+
+.center-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 430px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 22px;
+    padding: 32px;
+    box-shadow: 0 25px 60px rgba(0,0,0,.35);
+}
+
+.login-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #818cf8;
+    text-align: center;
+    margin: 0 0 8px;
+}
+
+.login-subtitle {
+    color: #94a3b8;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 26px;
+}
+
+.dark-label {
+    display: block;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.dark-input {
+    width: 100%;
+    padding: 13px 15px;
+    border-radius: 12px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: white;
+    outline: none;
+}
+
+.dark-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+}
+
+/* =========================
+   ADMIN WRAPPER
+========================= */
+
+.admin-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    padding: clamp(12px, 3vw, 32px);
     background:
-      radial-gradient(900px 520px at 8% 5%,rgba(59,130,246,.18),transparent 58%),
-      radial-gradient(760px 480px at 92% 10%,rgba(99,102,241,.15),transparent 55%),
-      linear-gradient(135deg,#071225 0%,#0b1730 48%,#101a3a 100%);
-    color:#0f172a;
-}
-button,input{font:inherit}
-button{-webkit-tap-highlight-color:transparent}
-.hidden{display:none!important}
-
-/* LOGIN */
-.center-screen{
-    min-height:100vh;display:flex;align-items:center;justify-content:center;
-    padding:24px;position:relative;overflow:hidden;
-}
-.center-screen:before,.center-screen:after{
-    content:"";position:absolute;border-radius:999px;filter:blur(2px);pointer-events:none;
-}
-.center-screen:before{
-    width:420px;height:420px;left:-170px;top:-150px;
-    background:radial-gradient(circle,rgba(59,130,246,.24),transparent 68%);
-}
-.center-screen:after{
-    width:420px;height:420px;right:-170px;bottom:-170px;
-    background:radial-gradient(circle,rgba(139,92,246,.20),transparent 68%);
-}
-.login-card{
-    position:relative;z-index:1;width:min(430px,100%);padding:34px;
-    background:rgba(15,27,50,.92);border:1px solid rgba(148,163,184,.18);
-    border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.05);
-    backdrop-filter:blur(16px);
-}
-.login-title{font-size:30px;font-weight:850;color:#a5b4fc;text-align:center;margin:0 0 8px}
-.login-subtitle{color:#94a3b8;text-align:center;font-size:14px;margin:0 0 26px}
-.dark-label{display:block;color:#dbe4f0;font-size:13px;font-weight:750;margin-bottom:8px}
-.dark-input{
-    width:100%;padding:13px 15px;border-radius:12px;border:1px solid #3b4a63;
-    background:#081225;color:#fff;outline:none;transition:.2s;
-}
-.dark-input:focus{border-color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,.13)}
-
-/* FULL PAGE ADMIN */
-.admin-wrapper{
-    width:100%;min-height:100vh;padding:0;
-    background:
-      radial-gradient(700px 420px at 12% 18%,rgba(37,99,235,.10),transparent 65%),
-      radial-gradient(650px 420px at 88% 78%,rgba(79,70,229,.10),transparent 65%);
-}
-.dashboard{
-    width:100%;min-height:100vh;margin:0;background:#f5f8fc;color:#0f172a;
-    border-radius:0;overflow:hidden;box-shadow:none;
+        radial-gradient(circle at top left, rgba(59,130,246,.13), transparent 30%),
+        #0f172a;
 }
 
-/* HEADER */
-.dashboard-header{
-    position:sticky;top:0;z-index:20;
-    background:linear-gradient(115deg,#0b1b3a 0%,#123d8f 48%,#2563eb 100%);
-    color:#fff;padding:18px clamp(18px,3vw,42px);
-    display:flex;align-items:center;justify-content:space-between;gap:18px;
-    border-bottom:1px solid rgba(255,255,255,.12);
-    box-shadow:0 8px 30px rgba(2,12,35,.20);
-}
-.header-left{display:flex;align-items:center;gap:13px;min-width:0}
-.header-icon{
-    width:46px;height:46px;flex:0 0 46px;border-radius:14px;
-    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);
-    display:flex;align-items:center;justify-content:center;font-size:21px;
-    box-shadow:inset 0 1px rgba(255,255,255,.10);
-}
-.header-title{margin:0;font-size:clamp(19px,2vw,27px);font-weight:850;letter-spacing:-.35px}
-.header-subtitle{margin:4px 0 0;font-size:12px;color:#dbeafe;opacity:.82}
-.logout-btn{
-    border:0;background:#ef4444;color:#fff;padding:10px 17px;border-radius:10px;
-    cursor:pointer;font-weight:800;white-space:nowrap;box-shadow:0 7px 18px rgba(239,68,68,.22);transition:.2s;
-}
-.logout-btn:hover{background:#dc2626;transform:translateY(-1px)}
-
-/* CONTENT */
-.dashboard-body{
-    width:100%;padding:clamp(20px,3vw,36px) clamp(18px,3.2vw,46px) 44px;
-    background:
-      linear-gradient(rgba(255,255,255,.60),rgba(255,255,255,.60)),
-      radial-gradient(circle at 1px 1px,rgba(100,116,139,.10) 1px,transparent 1px);
-    background-size:auto,22px 22px;
-}
-.dashboard-grid{
-    width:100%;max-width:1680px;margin:0 auto;
-    display:grid;grid-template-columns:minmax(330px,390px) minmax(0,1fr);
-    gap:24px;align-items:start;
+.dashboard {
+    width: min(1500px, 100%);
+    margin: 0 auto;
+    background: #f8fafc;
+    color: #0f172a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35);
 }
 
-/* CARDS */
-.card{
-    background:rgba(255,255,255,.96);border:1px solid #dbe4ef;border-radius:18px;
-    box-shadow:0 14px 38px rgba(15,23,42,.08),0 2px 5px rgba(15,23,42,.04);
-    overflow:hidden;
-}
-.card-header{padding:20px 20px 12px}
-.card-title{margin:0;font-size:16px;font-weight:850;color:#0f172a}
-.card-description{margin:5px 0 0;color:#64748b;font-size:12px}
-.card-content{padding:0 20px 20px}
+/* =========================
+   HEADER
+========================= */
 
-/* FORM */
-.form-group{margin-top:15px}
-.form-label{display:block;font-size:12px;font-weight:800;color:#334155;margin-bottom:7px}
-.input-wrapper{position:relative}
-.form-input{
-    width:100%;height:46px;border:1px solid #cbd5e1;border-radius:11px;background:#fff;
-    color:#0f172a;padding:0 13px;outline:none;transition:.2s;
-}
-.form-input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.10)}
-.form-input::placeholder{color:#94a3b8}
-
-/* BUTTONS */
-.primary-btn,.success-btn,.danger-btn,.secondary-btn,.outline-btn{
-    min-height:44px;border-radius:10px;border:0;cursor:pointer;font-weight:800;transition:.2s;
-}
-.primary-btn{width:100%;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 7px 16px rgba(37,99,235,.18)}
-.primary-btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(37,99,235,.22)}
-.success-btn{width:100%;background:linear-gradient(135deg,#059669,#047857);color:#fff;box-shadow:0 7px 16px rgba(5,150,105,.16)}
-.success-btn:hover{transform:translateY(-1px)}
-.danger-btn{background:#dc2626;color:#fff;padding:9px 14px}
-.danger-btn:hover{background:#b91c1c}
-.secondary-btn{background:#475569;color:#fff;padding:9px 14px}
-.secondary-btn:hover{background:#334155}
-.outline-btn{background:#fff;color:#2563eb;border:1px solid #93c5fd;padding:9px 14px}
-.outline-btn:hover{background:#eff6ff}
-.button-stack{display:grid;gap:10px;margin-top:18px}
-.two-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* SAVED DETAILS */
-.saved-box{
-    margin-top:15px;padding:12px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:11px;
-}
-.saved-title{font-size:11px;font-weight:850;color:#475569;margin-bottom:8px;letter-spacing:.2px}
-.saved-list{display:grid;gap:7px;max-height:210px;overflow-y:auto}
-.saved-item{
-    display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px;
-    background:#fff;border:1px solid #e2e8f0;border-radius:9px;
-}
-.saved-info{min-width:0}
-.saved-name{font-weight:750;font-size:12px;color:#0f172a}
-.saved-meta{font-size:10px;color:#64748b;margin-top:2px}
-.load-saved-btn{
-    border:0;background:#dbeafe;color:#1d4ed8;border-radius:7px;padding:6px 9px;
-    font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap
+.dashboard-header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
 }
 
-/* HISTORY */
-.history-card{min-width:0}
-.history-top{
-    padding:20px;display:flex;justify-content:space-between;align-items:center;gap:14px;
-    border-bottom:1px solid #e2e8f0;background:linear-gradient(180deg,#fff,#fbfdff);
-}
-.history-actions{display:flex;gap:8px;flex-wrap:wrap}
-.table-scroll{width:100%;overflow-x:auto}
-.history-table{width:100%;border-collapse:collapse;min-width:720px}
-.history-table th{
-    background:#f1f5f9;color:#475569;font-size:10px;text-transform:uppercase;letter-spacing:.35px;
-    text-align:left;padding:12px;border-bottom:1px solid #e2e8f0;white-space:nowrap;
-}
-.history-table td{padding:13px 12px;border-bottom:1px solid #eef2f7;vertical-align:middle;font-size:12px}
-.history-table tr:hover td{background:#f8fbff}
-.customer-cell{display:flex;align-items:center;gap:9px;min-width:180px}
-.avatar{
-    width:35px;height:35px;flex:0 0 35px;border-radius:50%;background:#dbeafe;color:#2563eb;
-    display:flex;align-items:center;justify-content:center;font-weight:850
-}
-.customer-name{font-weight:850;color:#0f172a}
-.customer-meta{font-size:10px;color:#64748b;margin-top:2px}
-.copy-link-btn{
-    border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:7px;
-    padding:7px 10px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap
-}
-.copy-link-btn:hover{background:#dbeafe}
-.badge{
-    display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border-radius:999px;
-    font-size:10px;font-weight:850;white-space:nowrap
-}
-.badge-yes{background:#dcfce7;color:#166534}
-.badge-no{background:#fef3c7;color:#92400e}
-.badge-pending{background:#e2e8f0;color:#475569}
-.badge-utr{background:#dbeafe;color:#1e40af}
-.date-cell{color:#64748b;white-space:nowrap;font-size:10px}
-.dashboard-footer{
-    padding:12px 20px 18px;color:#64748b;font-size:11px;display:flex;
-    justify-content:space-between;gap:10px;flex-wrap:wrap;background:#fff
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
 }
 
-/* EMPTY / TOAST */
-.empty-state{padding:52px 20px;text-align:center;color:#94a3b8}
-.empty-icon{font-size:30px;margin-bottom:8px}
-.empty-title{color:#475569;font-weight:750;margin-bottom:4px}
-.toast{
-    position:fixed;right:22px;bottom:22px;z-index:9999;max-width:calc(100vw - 44px);
-    background:#0f172a;color:#fff;padding:12px 16px;border-radius:11px;
-    box-shadow:0 12px 32px rgba(0,0,0,.30);font-size:13px;opacity:0;
-    transform:translateY(15px);pointer-events:none;transition:.25s
+.header-icon {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
 }
-.toast.show{opacity:1;transform:translateY(0)}
 
-/* RESPONSIVE */
-@media (max-width:1050px){
-    .dashboard-grid{grid-template-columns:minmax(300px,360px) minmax(0,1fr);gap:18px}
-    .dashboard-body{padding-left:18px;padding-right:18px}
+.header-title {
+    margin: 0;
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 800;
 }
-@media (max-width:850px){
-    .dashboard-grid{grid-template-columns:1fr}
-    .history-card{width:100%}
-    .dashboard-header{padding:16px 18px}
+
+.header-subtitle {
+    margin: 4px 0 0;
+    font-size: 12px;
+    opacity: .82;
 }
-@media (max-width:600px){
-    .dashboard-header{padding:14px}
-    .header-icon{width:39px;height:39px;flex-basis:39px;border-radius:11px}
-    .header-title{font-size:17px}
-    .header-subtitle{font-size:10px}
-    .logout-btn{padding:8px 11px;font-size:12px}
-    .dashboard-body{padding:12px 10px 24px}
-    .card{border-radius:14px}
-    .card-header,.card-content{padding-left:14px;padding-right:14px}
-    .two-buttons{grid-template-columns:1fr}
-    .history-top{align-items:flex-start;flex-direction:column;padding:14px}
-    .history-actions{width:100%}
-    .history-actions button{flex:1}
-    .dashboard-footer{padding:10px 14px 16px}
-    .toast{left:15px;right:15px;bottom:15px;max-width:none}
+
+.logout-btn {
+    border: 0;
+    background: #ef4444;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: 700;
+    white-space: nowrap;
 }
-@media (max-width:380px){
-    .header-title{font-size:15px}
-    .header-subtitle{display:none}
+
+.logout-btn:hover {
+    background: #dc2626;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.dashboard-body {
+    padding: clamp(14px, 2.5vw, 28px);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, 390px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(15,23,42,.05);
+}
+
+.card-header {
+    padding: 18px 18px 12px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.card-description {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.card-content {
+    padding: 0 18px 18px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-group {
+    margin-top: 15px;
+}
+
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 7px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.form-input {
+    width: 100%;
+    height: 45px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #fff;
+    color: #0f172a;
+    padding: 0 13px;
+    outline: none;
+    transition: .2s;
+}
+
+.form-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+}
+
+.form-input::placeholder {
+    color: #94a3b8;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn,
+.success-btn,
+.danger-btn,
+.secondary-btn,
+.outline-btn {
+    min-height: 44px;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.primary-btn {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #1d4ed8;
+}
+
+.success-btn {
+    width: 100%;
+    background: #059669;
+    color: white;
+}
+
+.success-btn:hover {
+    background: #047857;
+}
+
+.danger-btn {
+    background: #dc2626;
+    color: white;
+    padding: 9px 14px;
+}
+
+.danger-btn:hover {
+    background: #b91c1c;
+}
+
+.secondary-btn {
+    background: #475569;
+    color: white;
+    padding: 9px 14px;
+}
+
+.secondary-btn:hover {
+    background: #334155;
+}
+
+.outline-btn {
+    background: white;
+    color: #2563eb;
+    border: 1px solid #93c5fd;
+    padding: 9px 14px;
+}
+
+.outline-btn:hover {
+    background: #eff6ff;
+}
+
+.button-stack {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.two-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* =========================
+   SAVED DETAILS
+========================= */
+
+.saved-box {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 11px;
+}
+
+.saved-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+.saved-list {
+    display: grid;
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.saved-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 9px 10px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.saved-info {
+    min-width: 0;
+}
+
+.saved-name {
+    font-weight: 700;
+    font-size: 12px;
+    color: #0f172a;
+}
+
+.saved-meta {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.load-saved-btn {
+    border: 0;
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-radius: 7px;
+    padding: 6px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* =========================
+   TABLE CARD
+========================= */
+
+.history-card {
+    min-width: 0;
+}
+
+.history-top {
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.history-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+}
+
+.history-table th {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.history-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+    font-size: 12px;
+}
+
+.history-table tr:hover td {
+    background: #f8fafc;
+}
+
+.customer-cell {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 170px;
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.customer-name {
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.customer-meta {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.copy-link-btn {
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-radius: 7px;
+    padding: 7px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.badge-yes {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-no {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-pending {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.badge-utr {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.date-cell {
+    color: #64748b;
+    white-space: nowrap;
+    font-size: 10px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.dashboard-footer {
+    padding: 12px 18px 18px;
+    color: #64748b;
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-state {
+    padding: 45px 20px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.empty-icon {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.empty-title {
+    color: #475569;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+    max-width: calc(100vw - 40px);
+    background: #0f172a;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    font-size: 13px;
+    opacity: 0;
+    transform: translateY(15px);
+    pointer-events: none;
+    transition: .25s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-wrapper {
+        padding: 0;
+    }
+
+    .dashboard {
+        min-height: 100vh;
+        border-radius: 0;
+    }
+
+    .dashboard-header {
+        padding: 16px;
+    }
+
+    .header-icon {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+    }
+
+    .header-title {
+        font-size: 17px;
+    }
+
+    .header-subtitle {
+        font-size: 10px;
+    }
+
+    .logout-btn {
+        padding: 8px 11px;
+        font-size: 12px;
+    }
+
+    .dashboard-body {
+        padding: 10px;
+    }
+
+    .card {
+        border-radius: 13px;
+    }
+
+    .card-header,
+    .card-content {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .two-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .history-top {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px;
+    }
+
+    .history-actions {
+        width: 100%;
+    }
+
+    .history-actions button {
+        flex: 1;
+    }
+
+    .dashboard-footer {
+        padding: 10px 14px 16px;
+    }
+
+    .toast {
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        max-width: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .dashboard-header {
+        gap: 8px;
+    }
+
+    .header-subtitle {
+        display: none;
+    }
+
+    .header-title {
+        font-size: 15px;
+    }
+
+    .logout-btn {
+        font-size: 11px;
+    }
 }
 </style>
 </head>
@@ -711,7 +1193,7 @@ button{-webkit-tap-highlight-color:transparent}
                         </span>
 
                         <span>
-                            Data stored locally in this browser
+                            Live shared tracking • refreshes every 2 seconds
                         </span>
 
                     </div>
@@ -732,1226 +1214,390 @@ button{-webkit-tap-highlight-color:transparent}
 <div id="toast" class="toast"></div>
 
 
+
 <script>
-
-/* =========================================================
-   CONFIGURATION
-
-   NOTE:
-   These credentials are visible in client-side source code.
-   For real security, move authentication to a server.
-========================================================= */
-
-const CORRECT_SECRET_CODE = "hridoy21upiadmin";
-const CORRECT_ADMIN_USER = "hridoy221upi";
-const CORRECT_ADMIN_PASS = "indiarmayrechudi420bar";
-
-
-/* =========================================================
-   STORAGE KEYS
-========================================================= */
-
-const PRODUCTION_PAYMENT_URL =
-    "https://repaymentpro-loanclosing-payment-di.vercel.app";
-
-const HISTORY_KEY = "paymentLinkHistory";
+const AUTH_API = "/api/auth";
+const LINKS_API = "/api/links";
+const PAYMENT_BASE_URL = window.location.origin;
 const SAVED_CUSTOMERS_KEY = "savedCustomerDetails";
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
 let linkHistory = [];
 let savedCustomers = [];
-
-
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
-
-window.addEventListener("load", function() {
-
-    loadHistory();
-
-    loadSavedCustomers();
-
-    renderHistory();
-
-    renderSavedCustomers();
-
-});
-
-
-/* =========================================================
-   SAFE STORAGE
-========================================================= */
-
-function loadHistory() {
-
-    try {
-
-        linkHistory =
-            JSON.parse(
-                localStorage.getItem(HISTORY_KEY) || "[]"
-            );
-
-        if (!Array.isArray(linkHistory)) {
-            linkHistory = [];
-        }
-
-    } catch (error) {
-
-        linkHistory = [];
-
-    }
-
-}
-
-
-function loadSavedCustomers() {
-
-    try {
-
-        savedCustomers =
-            JSON.parse(
-                localStorage.getItem(SAVED_CUSTOMERS_KEY) || "[]"
-            );
-
-        if (!Array.isArray(savedCustomers)) {
-            savedCustomers = [];
-        }
-
-    } catch (error) {
-
-        savedCustomers = [];
-
-    }
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
+let polling = false;
 let toastTimer;
 
 function showToast(message) {
-
-    const toast = document.getElementById("toast");
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    clearTimeout(toastTimer);
-
-    toastTimer = setTimeout(function() {
-
-        toast.classList.remove("show");
-
-    }, 2500);
-
+  const el = document.getElementById("toast");
+  if (!el) return;
+  el.textContent = message;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 2500);
 }
 
+async function authRequest(action, body = {}) {
+  const response = await fetch(AUTH_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    cache: "no-store",
+    body: JSON.stringify({ action, ...body })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || "Authentication failed");
+  return data;
+}
 
-/* =========================================================
-   SECRET MODAL
-========================================================= */
+async function checkSession() {
+  try {
+    const response = await fetch(AUTH_API, { credentials: "same-origin", cache: "no-store" });
+    const data = await response.json();
+    if (data.authenticated) {
+      showDashboard();
+    } else if (data.preAuthenticated) {
+      showLogin();
+    } else {
+      showLanding();
+    }
+  } catch (e) {
+    showLanding();
+  }
+}
+
+function showLanding() {
+  document.getElementById("landing-page").classList.remove("hidden");
+  document.getElementById("admin-login-page").classList.add("hidden");
+  document.getElementById("d3repayon-container").classList.add("hidden");
+}
+
+function showLogin() {
+  document.getElementById("landing-page").classList.add("hidden");
+  document.getElementById("admin-login-page").classList.remove("hidden");
+  document.getElementById("d3repayon-container").classList.add("hidden");
+  setTimeout(() => document.getElementById("admin-user")?.focus(), 100);
+}
+
+function showDashboard() {
+  document.getElementById("landing-page").classList.add("hidden");
+  document.getElementById("admin-login-page").classList.add("hidden");
+  document.getElementById("d3repayon-container").classList.remove("hidden");
+  loadSavedCustomers();
+  renderSavedCustomers();
+  loadHistory();
+}
 
 function openSecretModal() {
-
-    const modal =
-        document.getElementById("secret-modal");
-
-    modal.classList.remove("hidden");
-
-    modal.classList.add("flex");
-
-    setTimeout(function() {
-
-        document
-            .getElementById("secret-code-input")
-            .focus();
-
-    }, 100);
-
+  const modal = document.getElementById("secret-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  document.getElementById("secret-error").classList.add("hidden");
+  setTimeout(() => document.getElementById("secret-code-input")?.focus(), 100);
 }
-
 
 function closeSecretModal() {
-
-    const modal =
-        document.getElementById("secret-modal");
-
-    modal.classList.remove("flex");
-
-    modal.classList.add("hidden");
-
-    document
-        .getElementById("secret-code-input")
-        .value = "";
-
-    document
-        .getElementById("secret-error")
-        .classList.add("hidden");
-
+  const modal = document.getElementById("secret-modal");
+  modal.classList.remove("flex");
+  modal.classList.add("hidden");
+  document.getElementById("secret-code-input").value = "";
+  document.getElementById("secret-error").classList.add("hidden");
 }
 
-
-function verifySecretCode(event) {
-
-    event.preventDefault();
-
-    const enteredCode =
-        document
-            .getElementById("secret-code-input")
-            .value
-            .trim();
-
-    const error =
-        document.getElementById("secret-error");
-
-    if (enteredCode === CORRECT_SECRET_CODE) {
-
-        closeSecretModal();
-
-        document
-            .getElementById("landing-page")
-            .classList.add("hidden");
-
-        document
-            .getElementById("admin-login-page")
-            .classList.remove("hidden");
-
-    } else {
-
-        error.classList.remove("hidden");
-
-    }
-
+async function verifySecretCode(event) {
+  event.preventDefault();
+  const code = document.getElementById("secret-code-input").value.trim();
+  const error = document.getElementById("secret-error");
+  try {
+    await authRequest("secret", { code });
+    closeSecretModal();
+    showLogin();
+  } catch (e) {
+    error.textContent = e.message || "Incorrect secret code. Try again.";
+    error.classList.remove("hidden");
+  }
 }
 
-
-/* =========================================================
-   ADMIN LOGIN
-========================================================= */
-
-function verifyAdminLogin(event) {
-
-    event.preventDefault();
-
-    const user =
-        document
-            .getElementById("admin-user")
-            .value
-            .trim();
-
-    const pass =
-        document
-            .getElementById("admin-pass")
-            .value;
-
-    const error =
-        document.getElementById("admin-error");
-
-    if (
-        user === CORRECT_ADMIN_USER &&
-        pass === CORRECT_ADMIN_PASS
-    ) {
-
-        error.classList.add("hidden");
-
-        document
-            .getElementById("admin-login-page")
-            .classList.add("hidden");
-
-        document
-            .getElementById("d3repayon-container")
-            .classList.remove("hidden");
-
-        renderHistory();
-
-        renderSavedCustomers();
-
-    } else {
-
-        error.classList.remove("hidden");
-
-    }
-
+async function verifyAdminLogin(event) {
+  event.preventDefault();
+  const user = document.getElementById("admin-user").value.trim();
+  const pass = document.getElementById("admin-pass").value;
+  const error = document.getElementById("admin-error");
+  try {
+    await authRequest("login", { user, pass });
+    error.classList.add("hidden");
+    document.getElementById("admin-user").value = "";
+    document.getElementById("admin-pass").value = "";
+    showDashboard();
+  } catch (e) {
+    error.textContent = e.message || "Invalid username or password.";
+    error.classList.remove("hidden");
+  }
 }
 
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-function logoutDashboard() {
-
-    document
-        .getElementById("d3repayon-container")
-        .classList.add("hidden");
-
-    document
-        .getElementById("landing-page")
-        .classList.remove("hidden");
-
-    document
-        .getElementById("admin-user")
-        .value = "";
-
-    document
-        .getElementById("admin-pass")
-        .value = "";
-
+async function logoutDashboard() {
+  try { await authRequest("logout"); } catch (_) {}
+  linkHistory = [];
+  showLanding();
 }
 
-
-/* =========================================================
-   GET FORM DATA
-========================================================= */
-
-function getFormData() {
-
-    return {
-
-        name:
-            document
-                .getElementById("input-name")
-                .value
-                .trim(),
-
-        mobile:
-            document
-                .getElementById("input-mobile")
-                .value
-                .trim(),
-
-        amount:
-            document
-                .getElementById("input-amount")
-                .value
-                .trim(),
-
-        upi:
-            document
-                .getElementById("input-upi")
-                .value
-                .trim()
-
-    };
-
+function getFormDetails() {
+  return {
+    name: document.getElementById("input-name").value.trim(),
+    mobile: document.getElementById("input-mobile").value.trim(),
+    amount: document.getElementById("input-amount").value.trim(),
+    upi: document.getElementById("input-upi").value.trim()
+  };
 }
 
-
-/* =========================================================
-   VALIDATE FORM
-========================================================= */
-
-function validateForm(data) {
-
-    if (
-        !data.name ||
-        !data.mobile ||
-        !data.amount ||
-        !data.upi
-    ) {
-
-        alert(
-            "Please fill in all fields:\n\n" +
-            "• Customer Name\n" +
-            "• Mobile Number\n" +
-            "• Amount\n" +
-            "• UPI ID"
-        );
-
-        return false;
-
-    }
-
-    const amountNumber =
-        Number(data.amount);
-
-    if (
-        !Number.isFinite(amountNumber) ||
-        amountNumber <= 0
-    ) {
-
-        alert("Please enter a valid amount.");
-
-        return false;
-
-    }
-
-    return true;
-
+function saveCustomerDetails(showMessage = true) {
+  const details = getFormDetails();
+  if (!details.name || !details.mobile || !details.amount || !details.upi) {
+    alert("Please fill Customer Name, Mobile Number, Amount and UPI ID.");
+    return false;
+  }
+  const key = `${details.name}|${details.mobile}|${details.amount}|${details.upi}`;
+  savedCustomers = savedCustomers.filter(x => `${x.name}|${x.mobile}|${x.amount}|${x.upi}` !== key);
+  savedCustomers.unshift({ ...details, savedAt: Date.now() });
+  savedCustomers = savedCustomers.slice(0, 10);
+  localStorage.setItem(SAVED_CUSTOMERS_KEY, JSON.stringify(savedCustomers));
+  renderSavedCustomers();
+  if (showMessage) showToast("Customer details saved.");
+  return true;
 }
 
-
-/* =========================================================
-   SAVE CUSTOMER DETAILS
-========================================================= */
-
-function saveCustomerDetails() {
-
-    const data = getFormData();
-
-    if (!validateForm(data)) {
-        return;
-    }
-
-
-    loadSavedCustomers();
-
-
-    /*
-       Avoid exact duplicates.
-    */
-
-    const existingIndex =
-        savedCustomers.findIndex(function(item) {
-
-            return (
-                item.name.toLowerCase() ===
-                    data.name.toLowerCase() &&
-                item.mobile === data.mobile &&
-                item.upi.toLowerCase() ===
-                    data.upi.toLowerCase()
-            );
-
-        });
-
-
-    const customer = {
-
-        id:
-            existingIndex >= 0
-                ? savedCustomers[existingIndex].id
-                : "customer_" + Date.now(),
-
-        name: data.name,
-
-        mobile: data.mobile,
-
-        amount: data.amount,
-
-        upi: data.upi,
-
-        savedAt:
-            new Date().toISOString()
-
-    };
-
-
-    if (existingIndex >= 0) {
-
-        savedCustomers[existingIndex] =
-            customer;
-
-    } else {
-
-        savedCustomers.unshift(customer);
-
-    }
-
-
-    localStorage.setItem(
-        SAVED_CUSTOMERS_KEY,
-        JSON.stringify(savedCustomers)
-    );
-
-
-    renderSavedCustomers();
-
-    showToast("Customer details saved successfully.");
-
+function loadSavedCustomers() {
+  try {
+    const data = JSON.parse(localStorage.getItem(SAVED_CUSTOMERS_KEY) || "[]");
+    savedCustomers = Array.isArray(data) ? data : [];
+  } catch (_) { savedCustomers = []; }
 }
-
-
-/* =========================================================
-   RENDER SAVED CUSTOMERS
-========================================================= */
 
 function renderSavedCustomers() {
-
-    const container =
-        document.getElementById("saved-customers");
-
-    if (!container) {
-        return;
-    }
-
-
-    loadSavedCustomers();
-
-
-    if (savedCustomers.length === 0) {
-
-        container.innerHTML = `
-            <div style="
-                font-size:11px;
-                color:#94a3b8;
-                text-align:center;
-                padding:8px;
-            ">
-                No saved customers yet.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    /*
-       Show newest 20 saved customers.
-    */
-
-    container.innerHTML =
-        savedCustomers
-            .slice(0, 20)
-            .map(function(item) {
-
-                const safeId =
-                    encodeURIComponent(item.id);
-
-                return `
-
-                    <div class="saved-item">
-
-                        <div class="saved-info">
-
-                            <div class="saved-name">
-                                ${escapeHtml(item.name)}
-                            </div>
-
-                            <div class="saved-meta">
-                                ${escapeHtml(item.mobile)}
-                                • ₹${escapeHtml(item.amount)}
-                            </div>
-
-                        </div>
-
-                        <button
-                            class="load-saved-btn"
-                            onclick="loadSavedCustomer('${safeId}')"
-                        >
-                            Load
-                        </button>
-
-                    </div>
-
-                `;
-
-            })
-            .join("");
-
+  const box = document.getElementById("saved-customers");
+  if (!box) return;
+  if (!savedCustomers.length) {
+    box.innerHTML = '<div style="font-size:11px;color:#94a3b8;padding:8px 0;text-align:center;">No saved customer details yet.</div>';
+    return;
+  }
+  box.innerHTML = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+      <button type="button" onclick="clearSavedCustomers()" style="border:0;background:#fee2e2;color:#b91c1c;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:800;cursor:pointer;">🗑 Clear All</button>
+    </div>
+    ${savedCustomers.map((item, i) => `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:8px;background:#f8fafc;">
+        <div style="min-width:0;flex:1;">
+          <div style="font-size:12px;font-weight:700;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(item.name)}</div>
+          <div style="font-size:10px;color:#64748b;">${escapeHTML(item.mobile)} • ₹${escapeHTML(item.amount)}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button type="button" onclick="loadSavedCustomer(${i})" style="border:0;background:#dbeafe;color:#1d4ed8;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer;">Load</button>
+          <button type="button" onclick="deleteSavedCustomer(${i})" title="Delete" style="border:0;background:#fee2e2;color:#dc2626;border-radius:8px;padding:7px 9px;font-size:12px;font-weight:800;cursor:pointer;">✕</button>
+        </div>
+      </div>`).join("")}`;
 }
 
-
-/* =========================================================
-   LOAD SAVED CUSTOMER
-========================================================= */
-
-function loadSavedCustomer(encodedId) {
-
-    const id =
-        decodeURIComponent(encodedId);
-
-    loadSavedCustomers();
-
-    const customer =
-        savedCustomers.find(function(item) {
-
-            return item.id === id;
-
-        });
-
-
-    if (!customer) {
-
-        showToast("Saved customer not found.");
-
-        return;
-
-    }
-
-
-    document
-        .getElementById("input-name")
-        .value = customer.name;
-
-    document
-        .getElementById("input-mobile")
-        .value = customer.mobile;
-
-    document
-        .getElementById("input-amount")
-        .value = customer.amount;
-
-    document
-        .getElementById("input-upi")
-        .value = customer.upi;
-
-
-    showToast("Customer details loaded.");
-
+function deleteSavedCustomer(index) {
+  const item = savedCustomers[index];
+  if (!item) return;
+  if (!confirm(`Delete saved details for ${item.name || 'this customer'}?`)) return;
+  savedCustomers.splice(index, 1);
+  localStorage.setItem(SAVED_CUSTOMERS_KEY, JSON.stringify(savedCustomers));
+  renderSavedCustomers();
+  showToast("Saved customer deleted.");
 }
 
-
-function saveCurrentFormDetails() {
-    const data = getFormData();
-
-    try {
-        localStorage.setItem(
-            "lastCustomerDetails",
-            JSON.stringify(data)
-        );
-    } catch (error) {
-        // Ignore storage errors; link generation can still continue.
-    }
+function clearSavedCustomers() {
+  if (!savedCustomers.length) return;
+  if (!confirm("Clear all saved customer details?")) return;
+  savedCustomers = [];
+  localStorage.removeItem(SAVED_CUSTOMERS_KEY);
+  renderSavedCustomers();
+  showToast("Saved customer details cleared.");
 }
 
-function restoreCurrentFormDetails() {
-    try {
-        const saved = JSON.parse(
-            localStorage.getItem("lastCustomerDetails") || "null"
-        );
-
-        if (!saved) return;
-
-        document.getElementById("input-name").value = saved.name || "";
-        document.getElementById("input-mobile").value = saved.mobile || "";
-        document.getElementById("input-amount").value = saved.amount || "";
-        document.getElementById("input-upi").value = saved.upi || "";
-    } catch (error) {
-        // Ignore malformed saved data.
-    }
+function loadSavedCustomer(index) {
+  const item = savedCustomers[index];
+  if (!item) return;
+  document.getElementById("input-name").value = item.name || "";
+  document.getElementById("input-mobile").value = item.mobile || "";
+  document.getElementById("input-amount").value = item.amount || "";
+  document.getElementById("input-upi").value = item.upi || "";
+  showToast("Customer details loaded.");
 }
 
+async function apiRequest(method, body = null, query = "") {
+  const options = {
+    method,
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-cache" },
+    cache: "no-store"
+  };
+  if (body) options.body = JSON.stringify(body);
+  const response = await fetch(LINKS_API + query, options);
+  const text = await response.text();
+  let data = {};
+  try { data = text ? JSON.parse(text) : {}; } catch (_) {}
+  if (response.status === 401) {
+    showLanding();
+    throw new Error("Your manager session has expired. Please login again.");
+  }
+  if (!response.ok) throw new Error(data.error || text || "Server request failed");
+  return data;
+}
 
-/* =========================================================
-   GENERATE PAYMENT LINK
-========================================================= */
+async function generateLink() {
+  const details = getFormDetails();
+  if (!details.name || !details.mobile || !details.amount || !details.upi) {
+    alert("Please fill out all details.");
+    return;
+  }
+  if (Number(details.amount) <= 0) {
+    alert("Amount must be greater than 0.");
+    return;
+  }
+  saveCustomerDetails(false);
 
-function generateLink() {
+  const linkId = "link_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
+  const targetUrl = PAYMENT_BASE_URL + "/payment.html" +
+    "?id=" + encodeURIComponent(linkId) +
+    "&amount=" + encodeURIComponent(details.amount) +
+    "&upi=" + encodeURIComponent(details.upi) +
+    "&name=" + encodeURIComponent(details.name) +
+    "&mobile=" + encodeURIComponent(details.mobile);
 
-    const data = getFormData();
+  const item = {
+    id: linkId,
+    name: details.name,
+    mobile: details.mobile,
+    amount: details.amount,
+    upi: details.upi,
+    url: targetUrl,
+    visited: false,
+    visitedAt: "",
+    copied: false,
+    copiedAt: "",
+    status: "Pending",
+    utr: "",
+    utrSubmittedAt: "",
+    createdAt: new Date().toISOString()
+  };
 
-    if (!validateForm(data)) {
-        return;
+  try {
+    await apiRequest("POST", { action: "create", item });
+    await loadHistory();
+    await copyLinkValue(targetUrl);
+    showToast("Payment link generated, saved to History and copied.");
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not save the payment link.");
+  }
+}
+
+async function copyLink(index) {
+  const item = linkHistory[index];
+  if (!item) return;
+  await copyLinkValue(item.url);
+  showToast("Payment link copied.");
+}
+
+async function copyLinkValue(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
     }
+  } catch (_) {}
+  try {
+    const temp = document.createElement("textarea");
+    temp.value = text;
+    temp.style.position = "fixed";
+    temp.style.left = "-9999px";
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+    return true;
+  } catch (_) { return false; }
+}
 
-    // Automatically save the latest details.
-    saveCurrentFormDetails();
-
-    /*
-       Generate stronger random ID.
-    */
-
-    const uniqueId =
-        "link_" +
-        Date.now() +
-        "_" +
-        Math.random()
-            .toString(36)
-            .substring(2, 10);
-
-
-    /*
-       Keep the same payment.html structure
-       your current payment page expects.
-    */
-
-    const generatedUrl =
-        `${PRODUCTION_PAYMENT_URL}/payment.html` +
-        `?id=${encodeURIComponent(uniqueId)}` +
-        `&amount=${encodeURIComponent(data.amount)}` +
-        `&upi=${encodeURIComponent(data.upi)}` +
-        `&name=${encodeURIComponent(data.name)}` +
-        `&mobile=${encodeURIComponent(data.mobile)}`;
-
-
-    const newItem = {
-
-        id: uniqueId,
-
-        name: data.name,
-
-        mobile: data.mobile,
-
-        amount: data.amount,
-
-        upi: data.upi,
-
-        details:
-            `${data.name} (${data.mobile}) - ₹${data.amount}`,
-
-        link: generatedUrl,
-
-        visited: false,
-
-        copied: false,
-
-        status: "Pending",
-
-        createdAt:
-            new Date().toISOString()
-
-    };
-
-
-    loadHistory();
-
-
-    linkHistory.unshift(newItem);
-
-
-    localStorage.setItem(
-        HISTORY_KEY,
-        JSON.stringify(linkHistory)
-    );
-
-
+async function loadHistory() {
+  if (polling) return;
+  polling = true;
+  try {
+    const data = await apiRequest("GET");
+    linkHistory = Array.isArray(data.links) ? data.links : [];
     renderHistory();
-
-
-    /*
-       IMPORTANT:
-       We intentionally DO NOT clear the inputs.
-    */
-
-
-    showToast("Payment link generated successfully.");
-
-
-    /*
-       Automatically copy generated link.
-       If clipboard is unavailable, the link is still
-       available from the history table.
-    */
-
-    copyText(generatedUrl)
-        .then(function() {
-
-            showToast(
-                "Payment link generated and copied."
-            );
-
-        })
-        .catch(function() {
-
-            // Clipboard permission may be unavailable.
-
-        });
-
+  } catch (error) {
+    console.error("History load failed:", error);
+  } finally {
+    polling = false;
+  }
 }
 
-
-/* =========================================================
-   COPY TEXT
-========================================================= */
-
-function copyText(text) {
-
-    if (
-        navigator.clipboard &&
-        window.isSecureContext
-    ) {
-
-        return navigator.clipboard.writeText(text);
-
-    }
-
-
-    return new Promise(function(resolve, reject) {
-
-        try {
-
-            const input =
-                document.createElement("textarea");
-
-            input.value = text;
-
-            input.style.position = "fixed";
-            input.style.left = "-9999px";
-
-            document.body.appendChild(input);
-
-            input.focus();
-            input.select();
-
-            const successful =
-                document.execCommand("copy");
-
-            document.body.removeChild(input);
-
-            if (successful) {
-
-                resolve();
-
-            } else {
-
-                reject();
-
-            }
-
-        } catch (error) {
-
-            reject(error);
-
-        }
-
-    });
-
-}
-
-
-/* =========================================================
-   COPY HISTORY LINK
-========================================================= */
-
-function copyHistoryLink(index) {
-
-    loadHistory();
-
-    const item = linkHistory[index];
-
-    if (!item) {
-        return;
-    }
-
-
-    copyText(item.link)
-
-        .then(function() {
-
-            showToast(
-                "Payment link copied successfully."
-            );
-
-        })
-
-        .catch(function() {
-
-            alert(
-                "Could not copy automatically.\n\n" +
-                item.link
-            );
-
-        });
-
-}
-
-
-/* =========================================================
-   REFRESH DATA
-========================================================= */
-
-function refreshData() {
-
-    loadHistory();
-
-    loadSavedCustomers();
-
-    renderHistory();
-
-    renderSavedCustomers();
-
-    showToast("Data refreshed successfully.");
-
-}
-
-
-/* =========================================================
-   RENDER HISTORY
-========================================================= */
+function refreshData() { loadHistory(); }
 
 function renderHistory() {
-
-    loadHistory();
-
-    const tbody =
-        document.getElementById(
-            "history-table-body"
-        );
-
-    const total =
-        document.getElementById(
-            "total-links"
-        );
-
-
-    if (!tbody) {
-        return;
-    }
-
-
-    if (total) {
-
-        total.textContent =
-            "Total Links: " +
-            linkHistory.length;
-
-    }
-
-
-    if (linkHistory.length === 0) {
-
-        tbody.innerHTML = `
-
-            <tr>
-
-                <td colspan="6">
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">
-                            📋
-                        </div>
-
-                        <div class="empty-title">
-                            No payment links yet
-                        </div>
-
-                        <div>
-                            Generate your first payment link from the left panel.
-                        </div>
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    tbody.innerHTML =
-        linkHistory
-            .map(function(item, index) {
-
-                const name =
-                    item.name ||
-                    getNameFromDetails(item.details);
-
-                const mobile =
-                    item.mobile || "";
-
-                const amount =
-                    item.amount ||
-                    getAmountFromDetails(item.details);
-
-                const initial =
-                    (name || "C")
-                        .charAt(0)
-                        .toUpperCase();
-
-
-                const created =
-                    item.createdAt
-                        ? formatDate(item.createdAt)
-                        : "-";
-
-
-                const status =
-                    item.status || "Pending";
-
-
-                const statusClass =
-                    status.startsWith("UTR:")
-                        ? "badge badge-utr"
-                        : "badge badge-pending";
-
-
-                return `
-
-                    <tr>
-
-                        <td>
-
-                            <div class="customer-cell">
-
-                                <div class="avatar">
-                                    ${escapeHtml(initial)}
-                                </div>
-
-                                <div>
-
-                                    <div class="customer-name">
-                                        ${escapeHtml(name || "Customer")}
-                                    </div>
-
-                                    <div class="customer-meta">
-                                        ${escapeHtml(mobile)}
-                                        ${mobile ? " • " : ""}
-                                        ₹${escapeHtml(amount || "0")}
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="copy-link-btn"
-                                onclick="copyHistoryLink(${index})"
-                            >
-                                🔗 Copy Link
-                            </button>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="badge ${
-                                item.visited
-                                    ? "badge-yes"
-                                    : "badge-no"
-                            }">
-
-                                ${item.visited ? "Yes" : "No"}
-
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="badge ${
-                                item.copied
-                                    ? "badge-yes"
-                                    : "badge-no"
-                            }">
-
-                                ${item.copied ? "Yes" : "No"}
-
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="${statusClass}">
-
-                                ${escapeHtml(status)}
-
-                            </span>
-
-                        </td>
-
-
-                        <td class="date-cell">
-
-                            ${escapeHtml(created)}
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-            })
-            .join("");
-
+  const tbody = document.getElementById("history-table-body");
+  const total = document.getElementById("total-links");
+  if (!tbody || !total) return;
+  total.textContent = "Total Links: " + linkHistory.length;
+  const footer = document.querySelector(".dashboard-footer span:last-child");
+  if (footer) footer.textContent = "Live shared data • auto-refresh every 2 seconds";
+  if (!linkHistory.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="padding:35px;text-align:center;color:#94a3b8;">No payment links yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = linkHistory.map((item, index) => {
+    const status = item.status || "Pending";
+    const statusHTML = status.startsWith("UTR:")
+      ? `<span class="badge badge-yes">✓ ${escapeHTML(status)}</span>`
+      : `<span class="badge badge-pending">◷ Pending</span>`;
+    return `<tr>
+      <td><div class="details-name">${escapeHTML(item.name || "")}</div><div class="details-sub">₹${escapeHTML(item.amount || "")}</div><div class="details-sub">${escapeHTML(item.mobile || "")}</div></td>
+      <td><button class="copy-link-btn" type="button" onclick="copyLink(${index})">▣ Copy Link</button></td>
+      <td>${item.visited ? '<span class="badge badge-yes">✓ Yes</span>' : '<span class="badge badge-no">◉ No</span>'}</td>
+      <td>${item.copied ? '<span class="badge badge-yes">✓ Yes</span>' : '<span class="badge badge-no">◉ No</span>'}</td>
+      <td>${statusHTML}</td>
+      <td>${item.visited ? escapeHTML(formatDate(item.visitedAt || item.createdAt)) : '<span style="color:#94a3b8;">Not visited</span>'}</td>
+    </tr>`;
+  }).join("");
 }
 
-
-/* =========================================================
-   DATE FORMAT
-========================================================= */
-
-function formatDate(dateString) {
-
-    try {
-
-        const date =
-            new Date(dateString);
-
-        return date.toLocaleString(
-            undefined,
-            {
-                year: "numeric",
-                month: "short",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
-
-    } catch (error) {
-
-        return "-";
-
-    }
-
+function formatDate(value) {
+  if (!value) return "-";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString();
 }
 
-
-/* =========================================================
-   EXTRACT OLD DETAILS
-========================================================= */
-
-function getNameFromDetails(details) {
-
-    if (!details) {
-        return "Customer";
-    }
-
-    const match =
-        details.match(/^(.+?)\s+\(/);
-
-    return match
-        ? match[1]
-        : details;
-
-}
-
-
-function getAmountFromDetails(details) {
-
-    if (!details) {
-        return "0";
-    }
-
-    const match =
-        details.match(/₹([\d.]+)/);
-
-    return match
-        ? match[1]
-        : "0";
-
-}
-
-
-/* =========================================================
-   CLEAR HISTORY
-========================================================= */
-
-function clearHistory() {
-
-    if (linkHistory.length === 0) {
-
-        showToast("History is already empty.");
-
-        return;
-
-    }
-
-
-    const confirmed =
-        confirm(
-            "Are you sure you want to clear all payment link history?"
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
+async function clearHistory() {
+  if (!confirm("Are you sure you want to clear all tracking history?")) return;
+  try {
+    await apiRequest("POST", { action: "clear" });
     linkHistory = [];
-
-
-    localStorage.removeItem(
-        HISTORY_KEY
-    );
-
-
     renderHistory();
-
-    showToast("Payment link history cleared.");
-
+    showToast("History cleared.");
+  } catch (error) {
+    alert(error.message || "Could not clear history.");
+  }
 }
 
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
-
-function escapeHtml(value) {
-
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
+window.addEventListener("load", () => {
+  loadSavedCustomers();
+  renderSavedCustomers();
+  checkSession();
+});
 
-/* =========================================================
-   AUTO REFRESH LOCAL DATA
-========================================================= */
-
-setInterval(function() {
-
-    /*
-       This only refreshes localStorage.
-       It cannot receive updates from another device.
-    */
-
-    const oldLength =
-        linkHistory.length;
-
-    loadHistory();
-
-    if (linkHistory.length !== oldLength) {
-
-        renderHistory();
-
-    }
-
-}, 3000);
-
-
-/* =========================================================
-   KEYBOARD SHORTCUT
-   Ctrl + Enter = Generate Link
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.ctrlKey &&
-            event.key === "Enter"
-        ) {
-
-            const dashboard =
-                document.getElementById(
-                    "d3repayon-container"
-                );
-
-            if (
-                dashboard &&
-                !dashboard.classList.contains("hidden")
-            ) {
-
-                generateLink();
-
-            }
-
-        }
-
-    }
-);
-
+// Shared data check every 2 seconds while the manager is logged in.
+setInterval(() => {
+  if (!document.getElementById("d3repayon-container")?.classList.contains("hidden")) loadHistory();
+}, 2000);
 </script>
 
 </body>
